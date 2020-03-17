@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 
     try{
         string file = {"E:\\Qt project\\All Different Directions\\alldifferentdirections\\table.csv"};//sample.in
-        Parser parser(file, ',');
+        Parser parser(file, ';');
         //bool ss = parser.detectIsTable(',');//
         //cout<<ss;
         cout<<parser.automaticSeparatorDetection();//isTable();

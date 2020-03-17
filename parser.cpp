@@ -95,6 +95,10 @@ char automaticSeparatorDetection(void)
                           {
                             isTable[j] = false;
                           }
+                          if((initialSeparatorValues[j] == 0)&&(lineSeparators[j] == 0))
+                          {
+                            isTable[j] = false;
+                          }
                       }
                     }
                     lineSeparators.clear();
@@ -187,6 +191,6 @@ char rowSeparator;
 protected:
 string fileName;
 vector<vector<string>> parsedData;
-const int separators[3] = {',', '.', ' '};
+const int separators[4] = {',', '.', ' ', ';'};
 
 };
