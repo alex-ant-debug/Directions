@@ -18,15 +18,15 @@ Parser(string file, char symbol = ' ')
     this->rowSeparator = symbol;
 }
 
-vector<string> splitRow(char *rowPtr)
+vector<string> splitRow(char *rowPtr, char separator)
 {
     vector<string> rowData;
-    char *pch = strtok(rowPtr, &rowSeparator);//" "
+    char *pch = strtok(rowPtr, &separator);//" "
 
     while (pch != NULL)                         // пока есть лексемы
       {
           rowData.push_back(pch);
-          pch = strtok(NULL, &rowSeparator);//" "
+          pch = strtok(NULL, &separator);//" "
       }
     return rowData;
 }
@@ -47,8 +47,76 @@ unsigned int countNumberOfDelimiters(string lineTable, char separator)
     return quantity;
 }
 
-//automaticSeparatorDetection(void)
-//int separators[3] = {',', '.', ' '};
+char automaticSeparatorDetection(void)
+{
+    bool firstTime = true;
+    unsigned int separatorsCount = sizeof(separators)/sizeof(separators[0]);
+    vector<bool> isTable; // это атрибут класса статический
+    vector<unsigned int> initialSeparatorValues;
+    string line;
+
+    for(unsigned int i = 0; i < separatorsCount; i++)
+    {
+        isTable.push_back(true);
+    }
+
+    ifstream in(this->fileName);
+    if (in.is_open())
+    {
+            while (getline(in, line))
+            {
+                vector<unsigned int> lineSeparators;
+                for(unsigned int i = 0; i < separatorsCount; i++)
+                {
+                    if(isTable[i] != false)
+                    {
+                        lineSeparators.push_back(countNumberOfDelimiters(line, this->separators[i]));
+                    }
+                    else
+                    {
+                        lineSeparators.push_back(false);
+                    }
+                }
+                line.clear();
+
+                if(firstTime == true)
+                {
+                    initialSeparatorValues = lineSeparators;
+                    lineSeparators.clear();
+                    firstTime = false;
+                }
+                else
+                {
+                    for(unsigned int j = 0; j < separatorsCount; j++)
+                    {
+                      if(isTable[j] != false)
+                      {
+                          if(initialSeparatorValues[j] != lineSeparators[j])
+                          {
+                            isTable[j] = false;
+                          }
+                      }
+                    }
+                    lineSeparators.clear();
+                }
+            }
+        // закрываем файл
+        in.close();
+    }
+    else
+    {
+        throw 99;//"File not found";
+    }
+
+    for(unsigned int i = 0; i < separatorsCount; i++)
+    {
+        if(isTable[i] != false)
+        {
+            return this->separators[i];
+        }
+    }
+    return 0;
+}
 
 bool detectIsTable(char separator)
 {
@@ -72,7 +140,7 @@ bool detectIsTable(char separator)
 
     while (getline(fileTable, lineTable))
     {
-        int quantity = countNumberOfDelimiters(lineTable, separator);
+        unsigned int quantity = countNumberOfDelimiters(lineTable, separator);
         if(quantity != initialValue)
         {
             isTable = false;
@@ -96,7 +164,7 @@ void parseFile(void)
             vector<string> splitedRow;
             //преобразование string в char
             char *cstr = &line[0u];
-            splitedRow = splitRow(cstr);
+            splitedRow = splitRow(cstr, this->rowSeparator);
             this->parsedData.push_back(splitedRow);
             line.clear();
         }
@@ -114,9 +182,11 @@ vector<vector<string>> getParsedData(void)
    return  parsedData;
 }
 
+char rowSeparator;
+
 protected:
 string fileName;
-char rowSeparator;
 vector<vector<string>> parsedData;
+const int separators[3] = {',', '.', ' '};
 
 };
