@@ -12,10 +12,12 @@ public:
 Parser()
 {}
 
-Parser(string file, char symbol = ' ')
+Parser(string file, char symbol = 'a')
 {
     this->fileName = file;
-    this->rowSeparator = symbol;
+    this->rowSeparator = symbol == 'a'
+                       ? this->automaticSeparatorDetection()
+                       : symbol;
 }
 
 vector<string> splitRow(char *rowPtr, char separator)
@@ -34,9 +36,70 @@ vector<string> splitRow(char *rowPtr, char separator)
 unsigned int countNumberOfDelimiters(string lineTable, char separator)
 {//найти стандартную функцию подсчета разделителей в строке
     unsigned int quantity = 0;
+
+
+    size_t found = 0;
+    char quotesSimbol = '"';
+    unsigned int sizeLine = lineTable.size();
+
+
+    found = lineTable.find_first_of(quotesSimbol,found+1);
+    if(found == string::npos)
+    {
+        return countNumberOfDelimitersSimple(lineTable, separator);
+    }
+    bool openFlag = true;
+    int serchStartPosition = found+1;
+    int openPosition = found;
+
+    while(found != string::npos)
+    {
+        found = lineTable.find_first_of(quotesSimbol, serchStartPosition);
+
+        if(found == string::npos)
+        {
+            break;
+        }
+
+        if(openFlag)
+        {
+            if(lineTable[found+1] == quotesSimbol)
+            {
+                serchStartPosition = found + 2;
+            }
+            else if(lineTable[found+1] == separator
+                    ||found == lineTable.size()-1)
+            {
+                openFlag = false;
+                lineTable.replace(openPosition, found-openPosition+1, "");
+                serchStartPosition = openPosition;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            openFlag =true;
+            serchStartPosition = found+1;
+            openPosition = found;
+        }
+    }
+
+    if(openFlag)
+    {
+        return 0;
+    }
+    return countNumberOfDelimitersSimple(lineTable, separator);
+}
+
+unsigned int countNumberOfDelimitersSimple(string lineTable, char separator)
+{
+    unsigned int quantity = 0;
     size_t found = 0;
 
-    found = lineTable.find_first_of(separator,found);
+    found = lineTable.find_first_of(separator,found);           //find separator
 
     while(found != string::npos)
     {
@@ -95,7 +158,7 @@ char automaticSeparatorDetection(void)
                           {
                             isTable[j] = false;
                           }
-                          if((initialSeparatorValues[j] == 0)&&(lineSeparators[j] == 0))
+                          else if((initialSeparatorValues[j] == 0)&&(lineSeparators[j] == 0))
                           {
                             isTable[j] = false;
                           }
@@ -119,7 +182,7 @@ char automaticSeparatorDetection(void)
             return this->separators[i];
         }
     }
-    return 0;
+    throw 97;
 }
 
 bool detectIsTable(char separator)

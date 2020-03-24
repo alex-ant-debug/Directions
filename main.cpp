@@ -28,14 +28,11 @@ int main(int argc, char *argv[])
 
     try{
         string file = {"E:\\Qt project\\All Different Directions\\alldifferentdirections\\table.csv"};//sample.in
-        Parser parser(file, ';');
-        //bool ss = parser.detectIsTable(',');//
-        //cout<<ss;
-        cout<<parser.automaticSeparatorDetection();//isTable();
-
-       /* parser.parseFile();
+        Parser parser(file);
+        parser.parseFile();
         vector<vector<string>> parsedData = parser.getParsedData();
-        if(!Direction::validateData(parsedData))
+        cout<<parser.rowSeparator;
+        /*if(!Direction::validateData(parsedData))
         {
             cout<<"Error data file"<<endl;
             return a.exec();
@@ -48,6 +45,7 @@ int main(int argc, char *argv[])
     catch(int error)
     {
         switch (error) {
+        case 97: {cout<<"Error: wrong file format"<<endl; break;}
         case 98: {cout<<"Error: file is empty "<<error<<endl; break;}
         case 99: {cout<<"Error "<<error<<endl; break;}
         case 100:{cout<<"False string in file"<<endl;break;}
