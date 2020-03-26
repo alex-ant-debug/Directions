@@ -3,7 +3,8 @@
 #include <cstring>
 #include <vector>
 #include "direction.cpp"
-#include "parser.cpp"
+//#include "parser.cpp"
+#include "parserCSV.cpp"
 
 using namespace std;
 
@@ -27,18 +28,37 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     try{
-        string file = {"E:\\Qt project\\All Different Directions\\alldifferentdirections\\table.csv"};//sample.in
+        string file = {"E:\\Qt project\\All Different Directions\\alldifferentdirections\\table.csv"};
+        ParserCSV parserCSV(file);
+        parserCSV.parseFile();
+
+        vector<vector<string>> parsedDataCSV = parserCSV.getParsedData();
+        for(unsigned int i = 0; i< parsedDataCSV.size(); i++, cout<<endl)
+            for(unsigned int j = 0; j< parsedDataCSV[i].size(); j++)
+            {
+                cout<<parsedDataCSV[i][j]<<"\t";
+            }
+
+        cout<<endl;
+
+        file = {"E:\\Qt project\\All Different Directions\\alldifferentdirections\\sample.in"};
         Parser parser(file);
         parser.parseFile();
+
         vector<vector<string>> parsedData = parser.getParsedData();
-        cout<<parser.rowSeparator;
-        /*if(!Direction::validateData(parsedData))
+        for(unsigned int i = 0; i< parsedData.size(); i++, cout<<endl)
+            for(unsigned int j = 0; j< parsedData[i].size(); j++)
+            {
+                cout<<parsedData[i][j]<<"\t";
+            }
+        cout<<parserCSV.rowSeparator<<endl;
+        if(!Direction::validateData(parsedData))
         {
             cout<<"Error data file"<<endl;
             return a.exec();
         }
 
-        Direction::runTasks(parsedData);*/
+        Direction::runTasks(parsedData);
 
     }
 

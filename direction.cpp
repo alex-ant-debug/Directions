@@ -96,7 +96,6 @@ class Direction
                 return 0;
             }
 
-            // проверить, что расстояние число
             if(!myIsNumber(parsedData[j+3]))            //walk is nomber
             {
                 return 0;
@@ -112,55 +111,18 @@ class Direction
         return 1;
     }
 
-//    static bool validateRowData(vector<string> parsedData)
-//    {
-//        int vectorSize = parsedData.size();
-//        int multiplicity = (vectorSize-2)%4;                                //multiplicity of four
-//        if(multiplicity == 0)
-//        {
-//            if(myIsNumber(parsedData[0]))                                   //x  is nomber
-//            {
-//                if(myIsNumber(parsedData[1]))                               //y is nomber
-//                {
-//                    for(int j=2;j<vectorSize;j+=4)
-//                    {
-//                        if((parsedData[j] == "start")||(parsedData[j] == "turn"))//start & turn
-//                        {
-//                            float isAngle = stof(parsedData[j+1]);
-//                            if((isAngle >= -360)&&(isAngle <= 360))             // -360 < angle < 360
-//                            {
-//                                if(parsedData[j+2] == "walk")                   //walk
-//                                {
-//                                    float isWalk =  stof(parsedData[j+3]);
-//                                    if(isWalk >= 0)
-//                                    {
-//                                        if((j+4) == vectorSize)
-//                                        {
-//                                            return 1;
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return 0;
-//    }
-
     static bool validateData(vector<vector<string>> parsedData)
     {
-        int n = parsedData.size();
+        unsigned int n = parsedData.size();
 
         unsigned int count = 0;
 
-        for(int i = 0; i< n; i++)
+        for(unsigned int i = 0; i< n; i++)
         {
             if(count == 0)
             {
                 int firstRowSize = parsedData[i].size();
-                if((firstRowSize != 1))                   // первый вектор единичный
+                if((firstRowSize != 1))
                 {
                     return 0;
                 }
@@ -172,7 +134,7 @@ class Direction
 
                 count = stof(parsedData[i][0]);
 
-                if(count > (n-i-1))                 //если count больше чем кол. строк
+                if(count > (n-i-1))
                 {
                     return 0;
                 }
@@ -248,7 +210,7 @@ class Direction
         }
         else
         {
-            cout<<"False string in file"<<endl;//throw 100;
+            cout<<"False string in file"<<endl;
         }
     }
 
