@@ -1,5 +1,4 @@
 #include "parser.cpp"
-#include <iostream>
 #include <cmath>
 
 using namespace std;
@@ -303,6 +302,7 @@ class ParserCSV : public Parser
 
         return isTable;
     }
+
 
     protected:
     const int separators[4] = {',', '.', ' ', ';'};

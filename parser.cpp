@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <iostream>
 #include <cstring>
 #include <vector>
 #include <fstream>
@@ -58,6 +59,15 @@ class Parser
     vector<vector<string>> getParsedData(void)
     {
         return  parsedData;
+    }
+
+    void printParserData(void)
+    {
+        for(unsigned int i = 0; i< parsedData.size(); i++, cout<<endl)
+            for(unsigned int j = 0; j< parsedData[i].size(); j++)
+            {
+                cout<<parsedData[i][j]<<"\t";
+            }
     }
 
     char rowSeparator;

@@ -3,7 +3,6 @@
 #include <cstring>
 #include <vector>
 #include "direction.cpp"
-//#include "parser.cpp"
 #include "parserCSV.cpp"
 
 using namespace std;
@@ -11,7 +10,7 @@ using namespace std;
 int getLinesFromFile(string *arraysString, string file)
 {
     int i = 0;
-    ifstream in(file);      // окрываем файл для чтения
+    ifstream in(file);
     if (in.is_open())
     {
         while (getline(in, *(arraysString+i)))
@@ -19,8 +18,8 @@ int getLinesFromFile(string *arraysString, string file)
            i++;
         }
     }
-    in.close();             // закрываем файл
-    return i;               //колл. строк
+    in.close();
+    return i;
 }
 
 int main(int argc, char *argv[])
@@ -31,13 +30,7 @@ int main(int argc, char *argv[])
         string file = {"E:\\Qt project\\All Different Directions\\alldifferentdirections\\table.csv"};
         ParserCSV parserCSV(file);
         parserCSV.parseFile();
-
-        vector<vector<string>> parsedDataCSV = parserCSV.getParsedData();
-        for(unsigned int i = 0; i< parsedDataCSV.size(); i++, cout<<endl)
-            for(unsigned int j = 0; j< parsedDataCSV[i].size(); j++)
-            {
-                cout<<parsedDataCSV[i][j]<<"\t";
-            }
+        parserCSV.printParserData();
 
         cout<<endl;
 
@@ -46,11 +39,7 @@ int main(int argc, char *argv[])
         parser.parseFile();
 
         vector<vector<string>> parsedData = parser.getParsedData();
-        for(unsigned int i = 0; i< parsedData.size(); i++, cout<<endl)
-            for(unsigned int j = 0; j< parsedData[i].size(); j++)
-            {
-                cout<<parsedData[i][j]<<"\t";
-            }
+        parser.printParserData();
         cout<<parserCSV.rowSeparator<<endl;
         if(!Direction::validateData(parsedData))
         {
